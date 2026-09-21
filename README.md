@@ -28,7 +28,7 @@ quantum-pulse/
 └── .github/workflows/        # CI + deploy pipelines
 ```
 
-See `docs/architecture.md` for how the pieces connect, `docs/data-model.md` for the Prisma schema, and `docs/engineering-tasks.md` for how the 2-engineer build splits.
+**New to this repo? Start with [`docs/DEVELOPER_GUIDE.md`](docs/DEVELOPER_GUIDE.md)** — setup, conventions, and a ramp-up primer on this stack. Then `docs/architecture.md` for how the pieces connect, `docs/data-model.md` for the Prisma schema, and `docs/engineering-tasks.md` for who owns what (Deekshitha: backend/messaging/audio; Sree Karnika: edge/widget/deployment).
 
 ## Quickstart (local dev)
 

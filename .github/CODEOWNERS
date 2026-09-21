@@ -1,0 +1,18 @@
+# Path-based review ownership, matching the two-engineer lane split in
+# docs/engineering-tasks.md. Replace the placeholders below with each
+# engineer's actual GitHub username once they're added as collaborators
+# on this repo (Settings -> Collaborators on GitHub).
+
+# Engineer 1 — Deekshitha (Backend, Messaging & Audio Pipeline)
+/services/pulse-api/      @REPLACE_WITH_DEEKSHITHA_GITHUB_USERNAME
+/content/synthesis/       @REPLACE_WITH_DEEKSHITHA_GITHUB_USERNAME
+/scripts/                 @REPLACE_WITH_DEEKSHITHA_GITHUB_USERNAME
+
+# Engineer 2 — Sree Karnika (Edge, Widget & Deployment)
+/edge/                    @REPLACE_WITH_SREEKARNIKA_GITHUB_USERNAME
+/web-embed/                @REPLACE_WITH_SREEKARNIKA_GITHUB_USERNAME
+/.github/workflows/deploy-edge.yml  @REPLACE_WITH_SREEKARNIKA_GITHUB_USERNAME
+
+# Shared — either can review
+/docs/                    @REPLACE_WITH_DEEKSHITHA_GITHUB_USERNAME @REPLACE_WITH_SREEKARNIKA_GITHUB_USERNAME
+/content/lessons.json     @REPLACE_WITH_DEEKSHITHA_GITHUB_USERNAME @REPLACE_WITH_SREEKARNIKA_GITHUB_USERNAME
