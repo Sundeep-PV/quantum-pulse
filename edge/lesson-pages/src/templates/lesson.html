@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{TITLE}} — Quantum Ready Pulse, Day {{DAY}}</title>
+  <link rel="stylesheet" href="/assets/css/lesson.css">
+</head>
+<body>
+  <div class="lesson-card">
+    <p class="eyebrow">Quantum Ready Pulse · Day {{DAY}} of 21</p>
+    <h1>{{TITLE}}</h1>
+    <p class="hook">{{HOOK}}</p>
+
+    <!-- Audio delivery format: narrated version of this lesson, streamed
+         through the access-worker so it stays gated to this subscriber's
+         own unlocked day (see edge/access-worker/src/worker.ts). -->
+    <div id="audio-gate">
+      <p class="muted">Verifying access…</p>
+    </div>
+
+    <article class="lesson-body">
+      {{ARTICLE_BODY}}
+    </article>
+
+    <div id="quiz-container"></div>
+  </div>
+
+  <script>
+    const DAY = {{DAY_JSON}};
+    const AUDIO_FILE = "{{AUDIO_FILE}}";
+    const WORKER_BASE = "{{WORKER_BASE_URL}}";
+
+    // Subscriber identity for this static page comes from the WhatsApp link's
+    // query string (?phone=...), not a session/cookie -- no login system,
+    // consistent with the rest of this build staying backend-light.
+    const params = new URLSearchParams(window.location.search);
+    const phone = params.get("phone");
+
+    async function initAudio() {
+      const gate = document.getElementById("audio-gate");
+      if (!phone) {
+        gate.innerHTML = "<p class=\"muted\">Open this page from your WhatsApp link to play the audio version.</p>";
+        return;
+      }
+
+      const verifyUrl = `${WORKER_BASE}/verify-access?phone=${encodeURIComponent(phone)}&day=${DAY}`;
+      const res = await fetch(verifyUrl);
+      const { access } = await res.json();
+
+      if (access !== "granted") {
+        gate.innerHTML = "<p class=\"muted\">This lesson isn't unlocked for this number yet.</p>";
+        return;
+      }
+
+      const audioUrl = `${WORKER_BASE}/audio/${AUDIO_FILE}?phone=${encodeURIComponent(phone)}&day=${DAY}`;
+      gate.innerHTML = `
+        <audio controls preload="metadata" style="width:100%;">
+          <source src="${audioUrl}" type="audio/mp4">
+          Your browser does not support audio playback.
+        </audio>`;
+    }
+
+    window.addEventListener("DOMContentLoaded", initAudio);
+  </script>
+</body>
+</html>

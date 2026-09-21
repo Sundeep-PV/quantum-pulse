@@ -1,0 +1,11 @@
+{
+  "name": "@quantum-pulse/lesson-pages",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Generates the 21 static lesson pages from content/lessons.json. Zero-dependency, zero-backend output -- deployed to Cloudflare Pages. Each page embeds an <audio> player pointed at the access-worker's gated audio proxy.",
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build-lessons.mjs",
+    "dev": "node scripts/build-lessons.mjs && npx serve dist"
+  }
+}

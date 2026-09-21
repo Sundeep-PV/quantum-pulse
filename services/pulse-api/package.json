@@ -1,0 +1,31 @@
+{
+  "name": "@quantum-pulse/pulse-api",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Fastify + Prisma backend for Quantum Ready Pulse. Deployed as an additional service alongside Quantinnel's existing platform, sharing its Postgres/Prisma conventions.",
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "build": "tsc -p tsconfig.json",
+    "start": "node dist/index.js",
+    "test": "vitest run",
+    "lint": "eslint src --ext .ts",
+    "prisma:generate": "prisma generate",
+    "prisma:migrate": "prisma migrate dev",
+    "job:send-daily-lessons": "tsx src/jobs/send-daily-lessons.ts"
+  },
+  "dependencies": {
+    "@fastify/cors": "^9.0.1",
+    "@prisma/client": "^5.19.0",
+    "fastify": "^4.28.1",
+    "stripe": "^16.8.0",
+    "twilio": "^5.3.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.0",
+    "prisma": "^5.19.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.5.4",
+    "vitest": "^2.0.5"
+  }
+}

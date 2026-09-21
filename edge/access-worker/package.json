@@ -1,0 +1,17 @@
+{
+  "name": "@quantum-pulse/access-worker",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Cloudflare Worker: gates lesson text-page and audio-file access to paying, day-eligible subscribers. Adapts the KV-gatekeeper pattern from the Quantum Ready audio-distribution reference doc, extended to also proxy R2-hosted audio with byte-range support.",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "test": "vitest run"
+  },
+  "devDependencies": {
+    "wrangler": "^3.78.0",
+    "vitest": "^2.0.5",
+    "@cloudflare/workers-types": "^4.20240925.0",
+    "typescript": "^5.5.4"
+  }
+}

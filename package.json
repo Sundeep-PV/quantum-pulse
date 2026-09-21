@@ -1,0 +1,23 @@
+{
+  "name": "quantum-pulse",
+  "private": true,
+  "description": "21-day WhatsApp quantum-literacy course — signup embedded in quantumreadyea.org, Stripe payment, backend on Quantinnel's existing service, edge-hosted lesson pages.",
+  "workspaces": [
+    "services/pulse-api",
+    "edge/access-worker",
+    "edge/lesson-pages",
+    "web-embed/pulse-widget"
+  ],
+  "scripts": {
+    "dev:api": "npm run dev --workspace services/pulse-api",
+    "dev:worker": "npm run dev --workspace edge/access-worker",
+    "dev:widget": "npm run dev --workspace web-embed/pulse-widget",
+    "build:lessons": "npm run build --workspace edge/lesson-pages",
+    "build": "npm run build --workspaces --if-present",
+    "test": "npm run test --workspaces --if-present",
+    "lint": "npm run lint --workspaces --if-present"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

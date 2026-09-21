@@ -1,0 +1,98 @@
+// Quantum Ready Pulse — Prisma schema
+//
+// Deployed against the same Postgres instance/conventions Quantinnel's other
+// services use (per docs/architecture.md). Model names are prefixed with
+// `Pulse` to avoid collisions if this ever shares a schema/database with
+// Quantinnel's own tables rather than a dedicated `quantum_pulse` schema.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum SubscriberStatus {
+  active
+  completed
+  opted_out
+  failed
+}
+
+enum DeliveryChannel {
+  whatsapp_text
+  whatsapp_audio
+}
+
+enum DeliveryStatus {
+  sent
+  failed
+  skipped
+}
+
+model PulseSubscriber {
+  id                     String            @id @default(uuid())
+  phone                  String            @unique // E.164, e.g. +14155551234
+  email                  String?
+  country                String? // ISO 3166-1 alpha-2, derived from phone at signup
+  timezone               String // IANA name, e.g. America/New_York
+  status                 SubscriberStatus  @default(active)
+  currentDay             Int               @default(0) // 0 = paid, Day 1 not yet sent
+  startDate              DateTime // subscriber's local "day 1" date
+  stripeCheckoutSessionId String           @unique
+  consentAt              DateTime
+  lastSentAt             DateTime?
+  createdAt              DateTime          @default(now())
+  updatedAt              DateTime          @updatedAt
+
+  messageLogs            PulseMessageLog[]
+  quizResults            PulseQuizResult[]
+
+  @@index([status, currentDay])
+}
+
+model PulseLesson {
+  day         Int      @id // 1-21, matches content/lessons.json
+  title       String
+  hook        String
+  articleBody String
+  audioFile   String // filename, e.g. "day-05.m4b" -- matches R2 object key
+  audioUrl    String? // resolved public/edge URL, set once uploaded to R2
+  quizJson    Json? // { question, choices[], answer } or null (e.g. day 21)
+  updatedAt   DateTime @updatedAt
+
+  quizResults PulseQuizResult[]
+}
+
+// One row per delivery attempt, per channel. A single "day N" send produces
+// TWO rows (whatsapp_text + whatsapp_audio) so each format's delivery/failure
+// can be tracked and retried independently -- an audio media send failing
+// (e.g. file too large, transient Twilio error) shouldn't block the text hook.
+model PulseMessageLog {
+  id           String          @id @default(uuid())
+  subscriber   PulseSubscriber @relation(fields: [subscriberId], references: [id])
+  subscriberId String
+  day          Int
+  channel      DeliveryChannel
+  status       DeliveryStatus
+  twilioSid    String?
+  errorMessage String?
+  sentAt       DateTime        @default(now())
+
+  @@index([subscriberId, day])
+}
+
+model PulseQuizResult {
+  id           String          @id @default(uuid())
+  subscriber   PulseSubscriber @relation(fields: [subscriberId], references: [id])
+  subscriberId String
+  lesson       PulseLesson     @relation(fields: [day], references: [day])
+  day          Int
+  selectedIndex Int
+  correct      Boolean
+  answeredAt   DateTime        @default(now())
+
+  @@unique([subscriberId, day])
+}

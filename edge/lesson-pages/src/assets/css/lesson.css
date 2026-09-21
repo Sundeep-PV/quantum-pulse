@@ -1,0 +1,44 @@
+:root {
+  --bg-canvas: #f8fafc;
+  --card-surface: #ffffff;
+  --text-primary: #0f172a;
+  --text-secondary: #64748b;
+  --accent-glow: #2563eb;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background-color: var(--bg-canvas);
+  color: var(--text-primary);
+  margin: 0;
+  padding: 1.5rem 1rem;
+  display: flex;
+  justify-content: center;
+}
+
+.lesson-card {
+  background-color: var(--card-surface);
+  padding: 2rem;
+  border-radius: 16px;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+  width: 100%;
+  max-width: 640px;
+}
+
+.eyebrow {
+  color: var(--accent-glow);
+  font-weight: 600;
+  font-size: 0.8rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin: 0 0 0.5rem 0;
+}
+
+h1 { margin: 0 0 0.5rem 0; font-size: 1.6rem; letter-spacing: -0.02em; }
+.hook { color: var(--text-secondary); margin: 0 0 1.5rem 0; }
+.muted { color: var(--text-secondary); font-size: 0.9rem; }
+.lesson-body { line-height: 1.6; margin-top: 1.5rem; }
+#quiz-container { margin-top: 2rem; }
+audio { width: 100%; border-radius: 8px; margin-top: 0.5rem; }

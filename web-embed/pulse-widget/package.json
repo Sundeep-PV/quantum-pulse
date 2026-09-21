@@ -1,0 +1,23 @@
+{
+  "name": "@quantum-pulse/pulse-widget",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Embeddable signup + Stripe checkout widget for quantumreadyea.org. Builds to a single self-contained JS bundle that the marketing site drops in with one <script> tag plus a mount <div> -- no iframe, no separate deploy for the main site to coordinate.",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.5",
+    "@types/react-dom": "^18.3.0",
+    "@vitejs/plugin-react": "^4.3.1",
+    "typescript": "^5.5.4",
+    "vite": "^5.4.2"
+  }
+}

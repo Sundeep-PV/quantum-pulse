@@ -1,0 +1,29 @@
+name: Deploy pulse-api
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "services/pulse-api/**"
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      # TODO: replace with Quantinnel's actual deploy step (Docker build ->
+      # push to the shared registry -> kubectl apply / Helm upgrade, per
+      # docs/architecture.md). Placeholder kept minimal until an engineer
+      # confirms the exact registry/cluster targets with the Quantinnel
+      # platform team, rather than guessing infra that could misfire.
+      - name: Build image
+        run: docker build -t quantum-pulse-api:${{ github.sha }} services/pulse-api
+
+      - name: Placeholder — push & deploy
+        run: |
+          echo "TODO: docker push to Quantinnel's registry"
+          echo "TODO: kubectl set image / helm upgrade against Quantinnel's cluster"

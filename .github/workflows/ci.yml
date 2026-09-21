@@ -1,0 +1,76 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  pulse-api:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: pulse
+          POSTGRES_PASSWORD: pulse
+          POSTGRES_DB: quantum_pulse
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm install
+        working-directory: services/pulse-api
+      - run: npx prisma generate
+        working-directory: services/pulse-api
+      - run: npx prisma migrate deploy
+        working-directory: services/pulse-api
+        env:
+          DATABASE_URL: postgresql://pulse:pulse@localhost:5432/quantum_pulse
+      - run: npm run lint
+        working-directory: services/pulse-api
+      - run: npm test
+        working-directory: services/pulse-api
+        env:
+          DATABASE_URL: postgresql://pulse:pulse@localhost:5432/quantum_pulse
+
+  access-worker:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm install
+        working-directory: edge/access-worker
+      - run: npm test
+        working-directory: edge/access-worker
+
+  lesson-pages:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm run build
+        working-directory: edge/lesson-pages
+
+  pulse-widget:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm install
+        working-directory: web-embed/pulse-widget
+      - run: npm run build
+        working-directory: web-embed/pulse-widget

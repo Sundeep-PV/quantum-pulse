@@ -1,0 +1,25 @@
+.qp-widget {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  max-width: 420px;
+  padding: 2rem;
+  border-radius: 12px;
+  background: #ffffff;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+.qp-widget__title { margin: 0 0 0.25rem 0; font-size: 1.25rem; }
+.qp-widget__subtitle { margin: 0 0 1.5rem 0; color: #64748b; font-size: 0.9rem; }
+.qp-widget__form { display: flex; flex-direction: column; gap: 1rem; }
+.qp-widget__label { display: flex; flex-direction: column; gap: 0.375rem; font-size: 0.85rem; color: #334155; }
+.qp-widget__input { padding: 0.6rem 0.75rem; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 1rem; }
+.qp-widget__checkbox-row { display: flex; gap: 0.5rem; align-items: flex-start; font-size: 0.8rem; color: #64748b; }
+.qp-widget__error { color: #dc2626; font-size: 0.85rem; margin: 0; }
+.qp-widget__button {
+  background-color: #0284c7;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.qp-widget__button:disabled { opacity: 0.6; cursor: not-allowed; }

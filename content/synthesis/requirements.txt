@@ -1,0 +1,5 @@
+kokoro
+soundfile
+phonemizer-fork
+numpy
+boto3

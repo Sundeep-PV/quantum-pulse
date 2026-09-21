@@ -1,0 +1,60 @@
+name: Deploy edge (worker + lesson pages + widget)
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "edge/**"
+      - "web-embed/**"
+      - "content/**"
+
+jobs:
+  deploy-worker:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm install
+        working-directory: edge/access-worker
+      - name: Deploy to Cloudflare Workers
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          workingDirectory: edge/access-worker
+
+  deploy-lesson-pages:
+    runs-on: ubuntu-latest
+    needs: deploy-worker
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm run build
+        working-directory: edge/lesson-pages
+        env:
+          WORKER_BASE_URL: https://pulse.quantumreadyea.org
+      - name: Deploy to Cloudflare Pages
+        uses: cloudflare/pages-action@v1
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          projectName: quantum-pulse-lessons
+          directory: edge/lesson-pages/dist
+
+  build-widget:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm install
+        working-directory: web-embed/pulse-widget
+      - run: npm run build
+        working-directory: web-embed/pulse-widget
+      # TODO: publish dist/pulse-widget.js to whatever CDN/asset host
+      # quantumreadyea.org already serves static embeds from, and hand the
+      # resulting URL to whoever maintains the main site's templates.
